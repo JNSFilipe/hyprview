@@ -33,7 +33,7 @@ impl FromStr for Monitor {
             let value = toks.next().unwrap();
             match key {
                 "Monitor" => {
-                    monitor.id = value.to_string();
+                    monitor.id = value.split(" ").fuse().next().unwrap().to_string();
                 }
                 "description:" => {
                     monitor.description = value.to_string();
@@ -108,9 +108,6 @@ impl FromStr for Monitor {
 }
 
 fn get_monitor_info() -> Option<Vec<Monitor>> {
-    // Specify the command you want to run
-    // let command = "hyprctl monitors";
-
     // Use the Command struct to create and configure the command
     let output: Output = Command::new("hyprctl")
         .arg("monitors")
@@ -139,6 +136,23 @@ fn get_monitor_info() -> Option<Vec<Monitor>> {
     }
 }
 
+fn configure_monitor(monitors: Vec<Monitor>) {
+    let s = format!(
+        "{},{}@{},{},1,mirror,{}",
+        monitors[1].id,
+        monitors[1].resolution,
+        monitors[1].frame_rate.round(),
+        monitors[0].position,
+        monitors[0].id
+    );
+
+    println!("{}", s);
+
+    // let conf = Command::new("hyprctl")
+    //     .arg("monitors")
+    //     .arg(s);
+}
+
 fn main() {
     let monitors = get_monitor_info().unwrap();
 
@@ -146,7 +160,9 @@ fn main() {
         println!("No external monitor connected!")
     }
 
-    for (i, monitor) in monitors.iter().enumerate() {
-        println!("Monitor {}: {:?}", i, monitor);
-    }
+    configure_monitor(monitors)
+
+    // for (i, monitor) in monitors.iter().enumerate() {
+    //     println!("Monitor {}: {:?}", i, monitor);
+    // }
 }
