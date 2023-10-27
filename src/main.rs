@@ -15,6 +15,10 @@ struct Args {
     /// Second screen on top
     #[arg(short, long, action)]
     top: bool,
+
+    /// Second screen on the bottom
+    #[arg(short, long, action)]
+    bottom: bool,
 }
 
 fn main() {
@@ -36,6 +40,7 @@ fn main() {
         let mut monitors: Vec<Monitor> = serde_json::from_slice(&output.stdout).unwrap();
 
         // Check if there is a second monitor conected
+        // TODO: Use another command to double check howmany monitors are connected
         if monitors.len() < 2 {
             // Check if there is data of monitors in cache
             // Read it if there is data to read
@@ -84,6 +89,31 @@ fn main() {
                 monitors[1].refreshRate,
                 0,
                 0,
+                monitors[1].scale
+            );
+            run_hyprctl_monitors_command(command1);
+            run_hyprctl_monitors_command(command2);
+        }
+        if args.bottom {
+            println!("Second Monitor on the bottom");
+            let command1 = format!(
+                "{},{}x{}@{},{}x{},{}",
+                monitors[0].name,
+                monitors[0].width,
+                monitors[0].height,
+                monitors[0].refreshRate,
+                0,
+                0,
+                monitors[0].scale
+            );
+            let command2 = format!(
+                "{},{}x{}@{},{}x{},{}",
+                monitors[1].name,
+                monitors[1].width,
+                monitors[1].height,
+                monitors[1].refreshRate,
+                0,
+                monitors[0].height,
                 monitors[1].scale
             );
             run_hyprctl_monitors_command(command1);
