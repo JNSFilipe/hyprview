@@ -1,8 +1,8 @@
-use serde_derive::Deserialize;
+use serde_derive::{Deserialize, Serialize};
 use std::process::{Command, Output};
 
 // Define the struct for the Monitor data
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Monitor {
     pub id: u32,
     pub name: String,
@@ -25,7 +25,7 @@ pub struct Monitor {
     pub vrr: bool,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Workspace {
     id: u32,
     name: String,
