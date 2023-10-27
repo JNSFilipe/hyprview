@@ -9,6 +9,10 @@ struct Args {
     /// Duplicate screen
     #[arg(short, long, action)]
     duplicate: bool,
+
+    /// Second screen on top 
+    #[arg(short, long, action)]
+    top: bool,
 }
 
 fn main() {
@@ -33,7 +37,29 @@ fn main() {
                     monitors[1].refreshRate,
                     monitors[0].name 
                 );
-                println!("{}", command);
+                run_hyprctl_monitors_command(command);
+            } if args.top {
+                println!("Second Monitor on top");
+                let command1 = format!("{},{}x{}@{},{}x{},{}", 
+                    monitors[0].name, 
+                    monitors[0].width,
+                    monitors[0].height,
+                    monitors[0].refreshRate,
+                    0, 
+                    monitors[1].height,
+                    monitors[0].scale
+                );
+                let command2 = format!("{},{}x{}@{},{}x{},{}", 
+                    monitors[1].name, 
+                    monitors[1].width,
+                    monitors[1].height,
+                    monitors[1].refreshRate,
+                    0, 
+                    0,
+                    monitors[1].scale
+                );
+                run_hyprctl_monitors_command(command1);
+                run_hyprctl_monitors_command(command2);
             }
         } else {
             eprintln!("Error, just one monitor plugged in");
