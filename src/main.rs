@@ -27,6 +27,10 @@ struct Args {
     /// Second screen on the right
     #[arg(short, long, action)]
     right: bool,
+
+    /// Scale of the second monitor
+    #[arg(short, long, default_value_t = 1)]
+    scale: u8,
 }
 
 fn main() {
@@ -97,7 +101,7 @@ fn main() {
                 monitors[1].refreshRate,
                 0,
                 0,
-                monitors[1].scale
+                args.scale
             );
             run_hyprctl_monitors_command(command1);
             run_hyprctl_monitors_command(command2);
@@ -122,7 +126,7 @@ fn main() {
                 monitors[1].refreshRate,
                 0,
                 monitors[0].height,
-                monitors[1].scale
+                args.scale
             );
             run_hyprctl_monitors_command(command1);
             run_hyprctl_monitors_command(command2);
@@ -147,7 +151,7 @@ fn main() {
                 monitors[1].refreshRate,
                 0,
                 0,
-                monitors[1].scale
+                args.scale
             );
             run_hyprctl_monitors_command(command1);
             run_hyprctl_monitors_command(command2);
@@ -172,7 +176,7 @@ fn main() {
                 monitors[1].refreshRate,
                 monitors[0].width,
                 0,
-                monitors[1].scale
+                args.scale
             );
             run_hyprctl_monitors_command(command1);
             run_hyprctl_monitors_command(command2);
