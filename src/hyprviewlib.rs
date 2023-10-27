@@ -4,25 +4,25 @@ use std::process::{Command, Output};
 // Define the struct for the Monitor data
 #[derive(Debug, Deserialize)]
 pub struct Monitor {
-    id: u32,
-    name: String,
-    description: String,
-    make: String,
-    model: String,
-    serial: String,
-    width: u32,
-    height: u32,
-    refreshRate: f64,
-    x: u32,
-    y: u32,
-    activeWorkspace: Workspace,
-    specialWorkspace: Workspace,
-    reserved: Vec<u32>,
-    scale: f64,
-    transform: u32,
-    focused: bool,
-    dpmsStatus: bool,
-    vrr: bool,
+    pub id: u32,
+    pub name: String,
+    pub description: String,
+    pub make: String,
+    pub model: String,
+    pub serial: String,
+    pub width: u32,
+    pub height: u32,
+    pub refreshRate: f64,
+    pub x: u32,
+    pub y: u32,
+    pub activeWorkspace: Workspace,
+    pub specialWorkspace: Workspace,
+    pub reserved: Vec<u32>,
+    pub scale: f64,
+    pub transform: u32,
+    pub focused: bool,
+    pub dpmsStatus: bool,
+    pub vrr: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -31,7 +31,7 @@ pub struct Workspace {
     name: String,
 }
 
-pub fn run_hyprctl_command() -> Output {
+pub fn get_hyprctl_monitors_output() -> Output {
     let output = Command::new("hyprctl")
         .arg("-j")
         .arg("monitors")
@@ -39,4 +39,13 @@ pub fn run_hyprctl_command() -> Output {
         .expect("Failed to execute hyprctl command");
 
     output
+}
+
+pub fn run_hyprctl_monitors_command(arg: String) {
+    let command = Command::new("hyprctl")
+        .arg("keyword")
+        .arg("monitor")
+        .arg(arg)
+        .output()
+        .expect("Failed to execute hyprctl command");
 }
